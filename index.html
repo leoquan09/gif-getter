@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gif search (?)</title>
+</head>
+<body>
+    <form action="/apiTest/index.html" method="get">
+        <label for="search">Search for gifs from giphy</label>
+        <input type="text" name="search" id="search" placeholder="cats...">
+    </form>
+    <img src="#" alt="gif">
+    <script>
+        const form = document.querySelector('form');
+        const searchContent = document.querySelector('#search')
+        const img = document.querySelector('img');
+        async function gifSearch(textSearch) {
+            let url = ('https://api.giphy.com/v1/gifs/translate?api_key=zAWDLZYCMJ4jj9vfPckwUQ0jkVvdj2w4&s=');
+            try {
+                let request = fetch(url + textSearch);
+                let response = await (request);
+                if(!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                let result = await response.json();
+                img.src = result.data.images.original.url;
+            } catch (err) {
+                console.error(err.message);
+            }
+        }
+
+        form.addEventListener('submit', (e) => { 
+            e.preventDefault();
+            gifSearch(searchContent.value);
+            searchContent.value = '';
+        })
+</script>
+</body>
+</html>
